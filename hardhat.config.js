@@ -35,6 +35,10 @@ module.exports = {
       gasPrice: 20000000000,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
     },
+    brctestnet: {
+      url: 'https://testnet-rpc.brisescan.com',
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    },
   },
   solidity: {
     settings: {
@@ -47,6 +51,15 @@ module.exports = {
       },
     },
     compilers: [
+      {
+        version: "0.8.4",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200
+          }
+        }
+      },
       {
         version: "0.8.2",
         settings: {

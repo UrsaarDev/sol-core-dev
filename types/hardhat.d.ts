@@ -269,6 +269,18 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Ownable__factory>;
     getContractFactory(
+      name: "IBEP20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IBEP20__factory>;
+    getContractFactory(
+      name: "Numitor",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Numitor__factory>;
+    getContractFactory(
+      name: "Ownable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Ownable__factory>;
+    getContractFactory(
       name: "WAVAX",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.WAVAX__factory>;
@@ -884,6 +896,21 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.NumiStake>;
+    getContractAt(
+      name: "Ownable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Ownable>;
+    getContractAt(
+      name: "IBEP20",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IBEP20>;
+    getContractAt(
+      name: "Numitor",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Numitor>;
     getContractAt(
       name: "Ownable",
       address: string,

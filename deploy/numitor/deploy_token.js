@@ -6,7 +6,7 @@ async function main() {
     const [deployer] = await ethers.getSigners();
     console.log("deployer: ", deployer.address);
 
-    const factory = await ethers.getContractFactory("TimeBondDepository");
+    const factory = await ethers.getContractFactory("Numitor");
     const deployment = await factory.deploy();
     await deployment.deployed();
 

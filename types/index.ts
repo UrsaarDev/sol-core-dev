@@ -51,6 +51,7 @@ export type { IApprovalReceiver } from "./IApprovalReceiver";
 export type { IERC2612 } from "./IERC2612";
 export type { ITransferReceiver } from "./ITransferReceiver";
 export type { NumiStake } from "./NumiStake";
+export type { Numitor } from "./Numitor";
 export type { WAVAX } from "./WAVAX";
 export type { IPancakeCallee } from "./IPancakeCallee";
 export type { IPancakeERC20 } from "./IPancakeERC20";
@@ -140,6 +141,7 @@ export { IApprovalReceiver__factory } from "./factories/IApprovalReceiver__facto
 export { IERC2612__factory } from "./factories/IERC2612__factory";
 export { ITransferReceiver__factory } from "./factories/ITransferReceiver__factory";
 export { NumiStake__factory } from "./factories/NumiStake__factory";
+export { Numitor__factory } from "./factories/Numitor__factory";
 export { WAVAX__factory } from "./factories/WAVAX__factory";
 export { IPancakeCallee__factory } from "./factories/IPancakeCallee__factory";
 export { IPancakeERC20__factory } from "./factories/IPancakeERC20__factory";
