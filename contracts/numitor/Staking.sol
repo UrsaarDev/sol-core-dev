@@ -924,9 +924,6 @@ contract NumiStake is Ownable, ReentrancyGuard {
     // The block number when reward allocation starts.
     uint256 public startBlock;
 
-    //Token Lock time
-    uint256 public tokenLock;
-
     // The deposit fee
     uint16 public depositFee;
 
@@ -955,7 +952,7 @@ contract NumiStake is Ownable, ReentrancyGuard {
     uint256 public rewardPerToken;
 
     // Lock time for getting reward (1 year etc)
-    uint256 public lockTimeForReward = 30 days;
+    uint256 public lockTimeForReward;
 
     // Tax percentage when trying to withdraw before the lock ends (for ex. 2500 or 25%)
     uint16 public taxForEarlyWithdraw = 2500;
@@ -1067,47 +1064,46 @@ contract NumiStake is Ownable, ReentrancyGuard {
     function deposit(uint256 _amount) external nonReentrant {
         UserInfo storage user = userInfo[msg.sender];
 
-        if (hasUserLimit) {
-            require(
-                _amount.add(user.amount) <= poolLimitPerUser,
-                "User amount above limit"
-            );
-        }
+        // if (hasUserLimit) {
+        //     require(
+        //         _amount.add(user.amount) <= poolLimitPerUser,
+        //         "User amount above limit"
+        //     );
+        // }
 
         // Harvest is only available when user is not locked
         if (!userLocked(msg.sender)) {
             uint256 pending = pendingReward(msg.sender);
-            // if (pending > 0) {
-            //     uint256 rewardTransferred = safeRewardTransfer(
-            //         msg.sender,
-            //         pending
-            //     );
-            //     user.remainedReward = pending.sub(rewardTransferred);
-            // }
-            // user.lastRewardBlock = block.number;
+            if (pending > 0) {
+                uint256 rewardTransferred = safeRewardTransfer(
+                    msg.sender,
+                    pending
+                );
+                user.remainedReward = pending.sub(rewardTransferred);
+            }
+            user.lastRewardBlock = block.number;
         }
 
-        // if (_amount > 0) {
-        //     uint256 balanceBefore = stakedToken.balanceOf(address(this));
-        //     stakedToken.safeTransferFrom(msg.sender, address(this), _amount);
-        //     _amount = stakedToken.balanceOf(address(this)).sub(balanceBefore);
-        //     uint256 feeAmount = 0;
+        if (_amount > 0) {
+            uint256 balanceBefore = stakedToken.balanceOf(address(this));
+            stakedToken.safeTransferFrom(msg.sender, address(this), _amount);
+            _amount = stakedToken.balanceOf(address(this)).sub(balanceBefore);
+            uint256 feeAmount = 0;
 
-        //     if (depositFee > 0) {
-        //         feeAmount = _amount.mul(depositFee).div(10000);
-        //         if (feeAmount > 0) {
-        //             stakedToken.safeTransfer(feeAddress, feeAmount);
-        //         }
-        //     }
+            if (depositFee > 0) {
+                feeAmount = _amount.mul(depositFee).div(10000);
+                if (feeAmount > 0) {
+                    stakedToken.safeTransfer(feeAddress, feeAmount);
+                }
+            }
 
-        //     stakedSupply = stakedSupply.add(_amount).sub(feeAmount);
-        //     user.amount = user.amount.add(_amount).sub(feeAmount);
-        //     tokenLock = block.timestamp.add(30 days);
-        //     // Update last deposit time only when the pool is live
-        //     if (endBlock > block.number) {
-        //         user.lastDepositTime = now;
-        //     }
-        // }
+            stakedSupply = stakedSupply.add(_amount).sub(feeAmount);
+            user.amount = user.amount.add(_amount).sub(feeAmount);
+            // Update last deposit time only when the pool is live
+            if (endBlock > block.number) {
+                user.lastDepositTime = now;
+            }
+        }
 
         emit Deposit(msg.sender, _amount);
     }
@@ -1117,7 +1113,6 @@ contract NumiStake is Ownable, ReentrancyGuard {
      * @param _amount: amount to withdraw (in rewardToken)
      */
     function withdraw(uint256 _amount) external nonReentrant {
-        require(tokenLock <= now, "Cannot withdraw, please wait");
         UserInfo storage user = userInfo[msg.sender];
         require(
             stakedSupply >= _amount && user.amount >= _amount,
@@ -1179,12 +1174,6 @@ contract NumiStake is Ownable, ReentrancyGuard {
         }
         rewardToken.safeTransfer(_to, _amount);
         return _amount;
-    }
-
-    function claim() public nonReentrant {
-        UserInfo storage user = userInfo[msg.sender];
-        if(tokenLock <= now) safeRewardTransfer(msg.sender, user.remainedReward.div(2));
-        else safeRewardTransfer(msg.sender, user.remainedReward.div(10));
     }
 
     /**
@@ -1365,16 +1354,16 @@ contract NumiStake is Ownable, ReentrancyGuard {
         UserInfo storage user = userInfo[_user];
         uint256 multiplier = _getMultiplier(user.lastRewardBlock, block.number);
         // Users will get rewards only if they stake more than minimum amount
-        // if (user.amount >= minSupplyForReward) {
-        //     uint256 rewardAmount = user
-        //         .amount
-        //         .mul(rewardPerToken)
-        //         .mul(multiplier)
-        //         .div(BLOCK_PER_YEAR)
-        //         .div(PRECISION_FACTOR);
+        if (user.amount >= minSupplyForReward) {
+            uint256 rewardAmount = user
+                .amount
+                .mul(rewardPerToken)
+                .mul(multiplier)
+                .div(BLOCK_PER_YEAR)
+                .div(PRECISION_FACTOR);
 
-        //     return user.remainedReward.add(rewardAmount);
-        // }
+            return user.remainedReward.add(rewardAmount);
+        }
         return user.remainedReward;
     }
 

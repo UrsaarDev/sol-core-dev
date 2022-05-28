@@ -24,7 +24,6 @@ interface NumiStakeInterface extends ethers.utils.Interface {
     "BLOCK_PER_YEAR()": FunctionFragment;
     "MAX_DEPOSIT_FEE()": FunctionFragment;
     "NUMI_POOL_FACTORY()": FunctionFragment;
-    "claim()": FunctionFragment;
     "deposit(uint256)": FunctionFragment;
     "depositFee()": FunctionFragment;
     "emergencyRewardWithdraw(uint256)": FunctionFragment;
@@ -49,7 +48,6 @@ interface NumiStakeInterface extends ethers.utils.Interface {
     "startBlock()": FunctionFragment;
     "stopReward()": FunctionFragment;
     "taxForEarlyWithdraw()": FunctionFragment;
-    "tokenLock()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "updateDepositFee(uint16)": FunctionFragment;
     "updateFeeAddress(address)": FunctionFragment;
@@ -74,7 +72,6 @@ interface NumiStakeInterface extends ethers.utils.Interface {
     functionFragment: "NUMI_POOL_FACTORY",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "claim", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "deposit",
     values: [BigNumberish]
@@ -177,7 +174,6 @@ interface NumiStakeInterface extends ethers.utils.Interface {
     functionFragment: "taxForEarlyWithdraw",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "tokenLock", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
@@ -225,7 +221,6 @@ interface NumiStakeInterface extends ethers.utils.Interface {
     functionFragment: "NUMI_POOL_FACTORY",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "depositFee", data: BytesLike): Result;
   decodeFunctionResult(
@@ -298,7 +293,6 @@ interface NumiStakeInterface extends ethers.utils.Interface {
     functionFragment: "taxForEarlyWithdraw",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "tokenLock", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
@@ -458,10 +452,6 @@ export class NumiStake extends BaseContract {
 
     NUMI_POOL_FACTORY(overrides?: CallOverrides): Promise<[string]>;
 
-    claim(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     deposit(
       _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -542,8 +532,6 @@ export class NumiStake extends BaseContract {
 
     taxForEarlyWithdraw(overrides?: CallOverrides): Promise<[number]>;
 
-    tokenLock(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -607,10 +595,6 @@ export class NumiStake extends BaseContract {
   MAX_DEPOSIT_FEE(overrides?: CallOverrides): Promise<number>;
 
   NUMI_POOL_FACTORY(overrides?: CallOverrides): Promise<string>;
-
-  claim(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   deposit(
     _amount: BigNumberish,
@@ -689,8 +673,6 @@ export class NumiStake extends BaseContract {
 
   taxForEarlyWithdraw(overrides?: CallOverrides): Promise<number>;
 
-  tokenLock(overrides?: CallOverrides): Promise<BigNumber>;
-
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -754,8 +736,6 @@ export class NumiStake extends BaseContract {
     MAX_DEPOSIT_FEE(overrides?: CallOverrides): Promise<number>;
 
     NUMI_POOL_FACTORY(overrides?: CallOverrides): Promise<string>;
-
-    claim(overrides?: CallOverrides): Promise<void>;
 
     deposit(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -824,8 +804,6 @@ export class NumiStake extends BaseContract {
     stopReward(overrides?: CallOverrides): Promise<void>;
 
     taxForEarlyWithdraw(overrides?: CallOverrides): Promise<number>;
-
-    tokenLock(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
@@ -1053,10 +1031,6 @@ export class NumiStake extends BaseContract {
 
     NUMI_POOL_FACTORY(overrides?: CallOverrides): Promise<BigNumber>;
 
-    claim(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     deposit(
       _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1134,8 +1108,6 @@ export class NumiStake extends BaseContract {
 
     taxForEarlyWithdraw(overrides?: CallOverrides): Promise<BigNumber>;
 
-    tokenLock(overrides?: CallOverrides): Promise<BigNumber>;
-
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1190,10 +1162,6 @@ export class NumiStake extends BaseContract {
     MAX_DEPOSIT_FEE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     NUMI_POOL_FACTORY(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    claim(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
 
     deposit(
       _amount: BigNumberish,
@@ -1280,8 +1248,6 @@ export class NumiStake extends BaseContract {
     taxForEarlyWithdraw(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    tokenLock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,
